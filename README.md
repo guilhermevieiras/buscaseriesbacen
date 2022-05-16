@@ -4,29 +4,29 @@ Busca Series Ativas e Desativadas via web scraping e monta uma lista destas no A
 
 
 
-# Instalar Python
+## Instalar Python
 
-## Web Scrapper para buscar dados no site do Bacen
-'''python
+### Web Scrapper para buscar dados no site do Bacen
+```python
 pip install beautifulsoup4
-'''
-'''python
+```
+```python
 pip install selenium
-'''
-'''python
+```
+```python
 pip install get-chrome-driver
-'''
+```
 
 
-## Servidor Rest feito com Flask
-'''python
+### Servidor Rest feito com Flask
+```python
 pip install flask
-'''
-'''python
+```
+```python
 pip install flask_restful
-'''
+```
 
-## ORM para gerenciar dados no banco
-'''python
+### ORM para gerenciar dados no banco
+```python
 pip install flask_sqlalchemy
-'''
+```
