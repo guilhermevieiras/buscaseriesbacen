@@ -27,7 +27,7 @@ pip install flask_restful
 ```python
 pip install flask_sqlalchemy
 ```
-Então executar o comando para rodar os scripts de web scrapping e subir o servidor Flask na pasta buscaseriesbacen/python
+Então executar o comando para rodar os scripts de web scrapping e subir o servidor Flask na pasta .\buscaseriesbacen\python
 ```
 py flaskServer.py
 ```
@@ -39,7 +39,7 @@ Instalação do Angular
 npm install -g @angular/cli
 ```
 OBS: é preciso instalar o nodejs antes que deve ser baixado e instalado
-Na pasta do projeto buscaseriesbacen/angular executar o comando:
+Na pasta do projeto .\buscaseriesbacen\angular executar o comando:
 ```angular
 npm install
 ```
