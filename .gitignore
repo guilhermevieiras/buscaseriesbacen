@@ -1,0 +1,28 @@
+
+
+
+# Angular
+/dist/
+/bazel-out
+/integration/bazel/bazel-*
+*.log
+node_modules
+
+
+# Chrome Driver
+chromedriver/
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Banco de dados
+*.db
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+
