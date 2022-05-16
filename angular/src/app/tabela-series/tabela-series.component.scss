@@ -1,0 +1,16 @@
+table{
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+td, th {
+    margin: 4px;
+    min-width: 10px;
+}
+
+
+::ng-deep .mat-expansion-panel-description {
+    text-align: center;
+}

@@ -29,16 +29,16 @@ def executaBuscaSeries():
     chrome_options.add_argument("--headless") 
     
     # Download do ChromeDriver para a versão do Chrome instalada na maquina
-    #get_driver = GetChromeDriver()
+    get_driver = GetChromeDriver()
     # Adiciona o ChromeDriver baixado para path
-    #get_driver.install()
+    get_driver.install()
 
 
     ## caminho para o seu webdriver
-    p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver\\101.0.4951.41\\bin'
-    p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver'
-    driver = webdriver.Chrome(p +'\\chromedriver.exe', options=chrome_options)
-    #driver = webdriver.Chrome(options=chrome_options)
+    # p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver\\101.0.4951.41\\bin'
+    # p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver'
+    # driver = webdriver.Chrome(p +'\\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     
     
 
@@ -93,6 +93,7 @@ def executaBuscaSeries():
         
         
     todas_series = []
+    mapa_series = {}
     for l in linhas:
         colunas = l.findChildren("td")
         linha = SeriesModel(
@@ -104,9 +105,10 @@ def executaBuscaSeries():
             colunas[5].text, 
             colunas[6].text, 
             colunas[7].text, 
-            ''
+            'Ativa'
         )
         todas_series.append(linha)
+        mapa_series[linha.codigo] = linha
         
         
         
@@ -142,29 +144,33 @@ def executaBuscaSeries():
         
         
         
-    series_desativadas = []
+    #series_desativadas = []
     for l in linhas:
-        linha = []
+        #linha = []
         colunas = l.findChildren("td")
-        linha = SeriesModel(
-            int(colunas[0].text), 
-            colunas[1].text, 
-            colunas[2].text, 
-            colunas[3].text, 
-            datetime.strptime(colunas[4].text, "%d/%m/%Y"), 
-            colunas[5].text, 
-            colunas[6].text, 
-            colunas[7].text, 
-            'Desativada'
-        )
-        series_desativadas.append(linha)
-
-
-    for serie in todas_series:
-        if serie in series_desativadas:
-            serie.status = 'Desativada'
+        # linha = SeriesModel(
+        #     int(colunas[0].text), 
+        #     colunas[1].text, 
+        #     colunas[2].text, 
+        #     colunas[3].text, 
+        #     datetime.strptime(colunas[4].text, "%d/%m/%Y"), 
+        #     colunas[5].text, 
+        #     colunas[6].text, 
+        #     colunas[7].text, 
+        #     ''
+        # )
+        #series_desativadas.append(linha)
+        if int(colunas[0].text) in mapa_series:
+            mapa_series[int(colunas[0].text)].status = 'Desativada'
         else:
-            serie.status = 'Ativada'
+            print('Serie Não Encontrada', colunas)
+
+
+    # for serie in todas_series:
+    #     if serie in series_desativadas:
+    #         serie.status = 'Desativada'
+    #     else:
+    #         serie.status = 'Ativa'
 
     # check = True
     # for des in series_desativadas:

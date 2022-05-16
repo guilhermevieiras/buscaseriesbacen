@@ -2,6 +2,13 @@ import requests
 import os
 from datetime import date, datetime
 import threading
+import time
+
+# Executa operação ao fechar aplicação
+#import atexit
+
+
+#from apscheduler.schedulers.background import BackgroundScheduler
 
 
 # pip install flask
@@ -14,6 +21,8 @@ from flask_restful import Api, Resource, reqparse
 from sqlalchemy import orm, Table, Column, Integer, String, Date
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql.expression import Insert
 
 
 # pip install Flask-Script
@@ -35,8 +44,15 @@ db.init_app(app)
 
 
 class SeriesView(Resource):
+    # def get(self):
+    #     series = SeriesModel.query.all()
+    #     print(series)
+    #     return list(s.json() for s in series)
     def get(self):
-        series = SeriesModel.query.all()
+        args = request.args
+        status = args['status']
+        print(status)
+        series = db.session.query(SeriesModel).filter_by(status=status)
         print(series)
         return list(s.json() for s in series)
     def salvaSeries(self, series):
@@ -50,12 +66,29 @@ class SeriesView(Resource):
 #     SeriesView().salvaSeries(series)
 
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    return response
+
+
+# @compiles(Insert)
+# def append_string(insert, compiler, **kw):
+#     s = compiler.visit_insert(insert, **kw)
+#     if 'append_string' in insert.kwargs:
+#         return s + " " + insert.kwargs['append_string']
+#     print(s)
+#     return s
+
+
 def inicializa_banco_antes_servidor(series):
     base = declarative_base()
     engine = create_engine(BANCO_LOCAL_SQLALCHEMY)
     base.metadata.bind = engine
     session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-    Table('series', base.metadata,
+    table = Table('series', base.metadata,
         Column('codigo', Integer, primary_key=True),
         Column('nome', String),
         Column('unidade', String),
@@ -66,10 +99,28 @@ def inicializa_banco_antes_servidor(series):
         Column('especial', String),
         Column('status', String))
     base.metadata.create_all()
-    #session.
-    session.add_all(series)
-    #session.commit()
-    session.merge()
+    for serie in series:
+        session.merge(serie, load=True)
+    #session.add_all(series)
+    # query = ''' 
+    #     ON CONFLICT(codigo) DO UPDATE 
+    #         nome=VALUES(nome), 
+    #         unidade=VALUES(unidade), 
+    #         periodicidade=VALUES(periodicidade), 
+    #         inicio=VALUES(inicio), 
+    #         ultimovalor=VALUES(ultimovalor), 
+    #         fonte=VALUES(fonte), 
+    #         especial=VALUES(especial),
+    #         status=VALUES(status)'''
+    # codigos = []
+    # for serie in series:
+    #     if serie['codigo'] in codigos:
+    #         print('encontrado serie com codigo repetido', serie['codigo'])
+    #     else:
+    #         codigos.append(serie['codigo'])
+    #session.execute(table.insert(append_string = query), series)
+    session.commit()
+    #session.merge()
     session.flush()
     session.close()
     
@@ -77,8 +128,30 @@ def inicializa_banco_antes_servidor(series):
 def coleta_dados():
     print('coleta_dados')
     series = executaBuscaSeries()
-    # serie1 = SeriesModel(1, '', '', '', date.today(), '', '', '', '')
-    # serie2 = SeriesModel(2, '', '', '', date.today(), '', '', '', '')
+    # serie1 = SeriesModel(1, 'teste3', '', '', date.today(), '', '', '', '')
+    # serie2 = SeriesModel(2, '', 'teste4', '', date.today(), '', '', '', '')
+    # serie1 = {
+    #         'codigo': 1,
+    #         'nome': 'teste',
+    #         'unidade': '',
+    #         'periodicidade': '',
+    #         'inicio': date.today(),
+    #         'ultimovalor': '',
+    #         'fonte': '',
+    #         'especial': '',
+    #         'status': ''
+    #     }
+    # serie2 = {
+    #         'codigo': 2,
+    #         'nome': 'teste2',
+    #         'unidade': '',
+    #         'periodicidade': '',
+    #         'inicio': date.today(),
+    #         'ultimovalor': '',
+    #         'fonte': '',
+    #         'especial': '',
+    #         'status': ''
+    #     }
     # series = [serie1, serie2]
     inicializa_banco_antes_servidor(series)
     
@@ -115,7 +188,10 @@ if __name__ == '__main__':
     # second_thread = threading.Thread(target=coleta_dados)
     # first_thread.start()
     # second_thread.start()
-    coleta_dados()
+    start = time.time()
+    #coleta_dados()
+    end = time.time()
+    print('tempo decorrido para atualização da base:', end - start)
     app.run(debug=True, use_reloader=False)
 
         
