@@ -18,8 +18,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Banco de dados
-*.db
 
 # Flask stuff:
 instance/
