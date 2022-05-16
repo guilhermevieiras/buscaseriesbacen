@@ -1,4 +1,3 @@
-<h4 *ngIf="erroMostrarTabelaSeries">Erro, não foi possível carregar/recarregar dados do servidor...</h4>
 <div class="card-body">
     <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -6,186 +5,69 @@
             <h1 class="card-title mb-0" style="color:rgb(92, 104, 115);">{{titulo}}</h1>            
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <!-- <br>
-        <h5>Escolha a Diária:</h5>
-        <div *ngIf="true" matTooltip="Escolha Data Diária">
-        <mat-form-field style="width: 120px">
-            <mat-label>Data Diária</mat-label>
-            <select matNativeControl name="datadiaria" 
-                (change)="filterChangeDataDiaria($event)">
-            <option value="">-- Selecione a Data Diária --</option>
-            <option [value]="indice" *ngFor="let item of datasdiarias; let indice=index">
-                {{item.datadiaria  | date: 'dd/MM/yyyy'}} ({{item.totalregistros}} registros)
-            </option>
-            </select>
-            <button *ngIf="filtroSistema" matSuffix mat-icon-button aria-label="Clear" (click)="filtroSistema=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        </div>
-        <h5>Filtros:</h5>
-        <div *ngIf="true" matTooltip="Apresenta valores que coincidirem com apenas um dos filtros ou com todos">
-        <mat-form-field style="width: 120px">
-            <mat-label>Sistema</mat-label>
-            <input matInput [(ngModel)]="filtroSistema" (keyup.enter)="carregaFiltroJobs()">
-            <button *ngIf="filtroSistema" matSuffix mat-icon-button aria-label="Clear" (click)="filtroSistema=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp;
-        <mat-form-field style="width: 120px">
-            <mat-label>JCL</mat-label>
-            <input matInput [(ngModel)]="filtroJCL" (keyup.enter)="carregaFiltroJobs()">
-            <button *ngIf="filtroJCL" matSuffix mat-icon-button aria-label="Clear" (click)="filtroJCL=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp;
-        <mat-form-field style="width: 120px">
-            <mat-label>Hora Início</mat-label>
-            <input matInput [(ngModel)]="filtroHoraInicio" (keyup.enter)="carregaFiltroJobs()">
-            <button *ngIf="filtroHoraInicio" matSuffix mat-icon-button aria-label="Clear" (click)="filtroHoraInicio=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp; -->
-        <!-- <mat-form-field style="width: 120px">
-            <mat-label>Hora Fim</mat-label>
-            <input matInput [(ngModel)]="filtroHoraFim">
-            <button *ngIf="filtroHoraFim" matSuffix mat-icon-button aria-label="Clear" (click)="filtroHoraFim=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp; -->
-        <!-- <mat-form-field style="width: 120px">
-            <mat-label>Tempo Execução</mat-label>
-            <input matInput [(ngModel)]="filtroTempoExecucao" (keyup.enter)="carregaFiltroJobs()">
-            <button *ngIf="filtroTempoExecucao" matSuffix mat-icon-button aria-label="Clear" (click)="filtroTempoExecucao=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp; -->
-        <!-- <mat-form-field style="width: 120px">
-            <mat-label>Data Diária</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="filtroDataDiaria">
-            <button *ngIf="filtroDataDiaria" matSuffix mat-icon-button aria-label="Clear" (click)="filtroDataDiaria=''">
-            <mat-icon>close</mat-icon>
-            </button>
-            <mat-hint>DD/MM/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        &nbsp; -->
-        <!-- <mat-form-field style="width: 120px">
-            <mat-label>Schedule</mat-label>
-            <input matInput [(ngModel)]="filtroSchedule" (keyup.enter)="carregaFiltroJobs()">
-            <button *ngIf="filtroSchedule" matSuffix mat-icon-button aria-label="Clear" (click)="filtroSchedule=''">
-            <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
-        &nbsp;
-        <button  mat-raised-button (click)="carregaFiltroJobs()" matTooltip="Filtrar valores indicados">
-            <mat-icon style="margin:0px;" matTooltip="Filtrar">
-            search
-            </mat-icon>
-        </button>
-        <button  mat-raised-button (click)="limpaFiltroTabelaTempoExecucaoDiaria()" matTooltip="irá retornar todos valores sem filtros">
-            <mat-icon style="margin:0px;" matTooltip="Remove Filtros">
-            delete
-            </mat-icon>
-        </button>
-        </div> -->
         <table mat-table multiTemplateDataRows [dataSource]="tabelaSeries" class="mat-elevation-z8" *ngIf="tabelaSeries.data.length > 0">
-        <!-- indicador de que é expansível -->
-        <!-- <ng-container matColumnDef="indicadorexpansivel">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element; let indice = index" matTooltip="Clique para vizualizar mais detalhes">
-            <mat-icon style="margin:0px; color:rgb(92, 104, 115);" *ngIf="element != expandedElement">
-                expand_more
-            </mat-icon>
-            <mat-icon style="margin:0px; color:rgb(92, 104, 115);" *ngIf="element == expandedElement">
-                expand_less
-            </mat-icon>
-            </td>
-        </ng-container> -->
-        <!-- Código -->
-        <ng-container matColumnDef="codigo">
-            <th mat-header-cell *matHeaderCellDef>Código</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.codigo}}
-            </td>
-        </ng-container>
-        <!-- Nome -->
-        <ng-container matColumnDef="nome">
-            <th mat-header-cell *matHeaderCellDef>Nome da Série</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.nome}}
-            </td>
-        </ng-container>
-        <!-- Unidade -->
-        <ng-container matColumnDef="unidade">
-            <th mat-header-cell *matHeaderCellDef>Unidade</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.unidade}}
-            </td>
-        </ng-container>
-        <!-- Periodicidade -->
-        <ng-container matColumnDef="periodicidade">
-            <th mat-header-cell *matHeaderCellDef>Periodicidade</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.periodicidade}}
-            </td>
-        </ng-container>
-        <!-- Início -->
-        <ng-container matColumnDef="inicio" >
-            <th mat-header-cell *matHeaderCellDef>Início</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.inicio  | date: 'dd/MM/yyyy'}}
-            </td>
-        </ng-container>
-        <!-- Último Valor -->
-        <ng-container matColumnDef="ultimovalor">
-            <th mat-header-cell *matHeaderCellDef>Último Valor</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.ultimovalor}}
-            </td>
-        </ng-container>
-        <!-- Fonte -->
-        <ng-container matColumnDef="fonte">
-            <th mat-header-cell *matHeaderCellDef>Fonte</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.fonte}}
-            </td>
-        </ng-container>
-        <!-- Especial -->
-        <ng-container matColumnDef="especial">
-            <th mat-header-cell *matHeaderCellDef>Especial</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.especial}}
-            </td>
-        </ng-container>
-        <!-- Status -->
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Estatus</th>
-            <td mat-cell *matCellDef="let element; let indice = index">
-                {{element.status}}
-            </td>
-        </ng-container>
-        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-        <!-- <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let element" [attr.colspan]="tempoExecucaoDiariaColunas.length">
-            <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <div *ngIf="element == expandedElement"  style="width:100%">
-                <app-bar-chart [data]="registrosPorJob[element.nomejcl]"></app-bar-chart>
-                </div>
-            </div>
-            </td>
-        </ng-container> -->
-        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-        <tr mat-row *matRowDef="let element; columns: colunas;"></tr>
-        <!-- <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr> -->
+            <!-- Código -->
+            <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef>Código</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.codigo}}
+                </td>
+            </ng-container>
+            <!-- Nome -->
+            <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef>Nome da Série</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.nome}}
+                </td>
+            </ng-container>
+            <!-- Unidade -->
+            <ng-container matColumnDef="unidade">
+                <th mat-header-cell *matHeaderCellDef>Unidade</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.unidade}}
+                </td>
+            </ng-container>
+            <!-- Periodicidade -->
+            <ng-container matColumnDef="periodicidade">
+                <th mat-header-cell *matHeaderCellDef>Periodicidade</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.periodicidade}}
+                </td>
+            </ng-container>
+            <!-- Início -->
+            <ng-container matColumnDef="inicio" >
+                <th mat-header-cell *matHeaderCellDef>Início</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.inicio  | date: 'dd/MM/yyyy'}}
+                </td>
+            </ng-container>
+            <!-- Último Valor -->
+            <ng-container matColumnDef="ultimovalor">
+                <th mat-header-cell *matHeaderCellDef>Último Valor</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.ultimovalor}}
+                </td>
+            </ng-container>
+            <!-- Fonte -->
+            <ng-container matColumnDef="fonte">
+                <th mat-header-cell *matHeaderCellDef>Fonte</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.fonte}}
+                </td>
+            </ng-container>
+            <!-- Especial -->
+            <ng-container matColumnDef="especial">
+                <th mat-header-cell *matHeaderCellDef>Especial</th>
+                <td mat-cell *matCellDef="let element; let indice = index">
+                    {{element.especial}}
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+            <tr mat-row *matRowDef="let element; columns: colunas;"></tr>
         </table>
-        <mat-paginator [pageSizeOptions]="[50, 100, 200, 500, 1000, 5000, 10000]" showFirstLastButtons *ngIf="tabelaSeries.data.length > 0"></mat-paginator>
+        <mat-paginator showFirstLastButtons #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+            [pageSizeOptions]="[100, 200, 500, 1000, 5000, 10000]" (page)="pageChanged($event)" aria-label="Select page">
+        </mat-paginator>
         <div *ngIf="tabelaSeries.data.length < 1">Não existem registros de Series</div>
         <br>
     </mat-expansion-panel>

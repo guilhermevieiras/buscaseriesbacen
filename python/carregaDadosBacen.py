@@ -21,7 +21,7 @@ from models import SeriesModel
 def executaBuscaSeries():
     print('Irá buscar dados de séries no Bacen...')
     
-    url_bacen_series = 'https://www3.bcb.gov.br/sgspub/localizarseries/localizarSeries.do?method=prepararTelaLocalizarSeries'
+    URL_BACEN_SERIES = 'https://www3.bcb.gov.br/sgspub/localizarseries/localizarSeries.do?method=prepararTelaLocalizarSeries'
 
     chrome_options = Options()
 
@@ -34,10 +34,11 @@ def executaBuscaSeries():
     get_driver.install()
 
 
-    ## caminho para o seu webdriver
-    # p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver\\101.0.4951.41\\bin'
-    # p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver'
-    # driver = webdriver.Chrome(p +'\\chromedriver.exe', options=chrome_options)
+    ## caminho para o um ChromeDriver baixado manualmente - caso o ambiente não permita baixar automaticamente
+    # p = 'C:\\Users\\guilh\\OneDrive\\workspace-psi-sucri\\chromedriver\\chromedriver.exe'
+    # driver = webdriver.Chrome(p, options=chrome_options)
+    
+    ## Instalação de ChromeDriver baixado automaticamente pelo get_driver
     driver = webdriver.Chrome(options=chrome_options)
     
     
@@ -45,28 +46,28 @@ def executaBuscaSeries():
     # configuração do fluent wait do selenium para aguardar carregamento das telas
     wait = WebDriverWait(driver, 30)
     
-    driver.get(url_bacen_series)
+    driver.get(URL_BACEN_SERIES)
 
     WebDriverWait(driver, 10).until(EC.alert_is_present())
     driver.switch_to.alert.accept()
 
 
     # Lista de xpaths usados para encontrar elementos na pagina
-    xpath_botao_pesquisa_avancada = '//span[contains(., "Pesquisa Avançada")]'
-    xpath_checkbox_pesquisar_todos = '//input[@name="chkClassificacao"]'
-    xpath_botao_pesquisar = '//input[@title="Pesquisar"]'
-    xpath_botao_visualizar_impressao = '//a/img[@alt="Visualizar Impressão"]'
-    xpath_botao_series_desativadas = '//td/span[contains(., "Séries desativadas")]'
+    XPATH_BOTAO_PESQUISA_AVANCADA = '//span[contains(., "Pesquisa Avançada")]'
+    XPATH_CHECKBOX_PESQUISAR_TODOS = '//input[@name="chkClassificacao"]'
+    XPATH_BOTAO_PESQUISAR = '//input[@title="Pesquisar"]'
+    XPATH_BOTAO_VISUALIZAR_IMPRESSAO = '//a/img[@alt="Visualizar Impressão"]'
+    XPATH_BOTAO_SERIES_DESATIVADAS = '//td/span[contains(., "Séries desativadas")]'
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_botao_pesquisa_avancada))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_BOTAO_PESQUISA_AVANCADA))).click()
 
     driver.switch_to.frame(driver.find_element_by_id('iCorpo'))
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_checkbox_pesquisar_todos))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_botao_pesquisar))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_CHECKBOX_PESQUISAR_TODOS))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_BOTAO_PESQUISAR))).click()
 
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_botao_visualizar_impressao))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_BOTAO_VISUALIZAR_IMPRESSAO))).click()
 
 
     janela_principal = driver.window_handles[0]
@@ -117,11 +118,11 @@ def executaBuscaSeries():
     driver.switch_to.window(janela_principal)
 
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_botao_series_desativadas))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_BOTAO_SERIES_DESATIVADAS))).click()
 
     driver.switch_to.frame(driver.find_element_by_id('iCorpo'))
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, xpath_botao_visualizar_impressao))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATH_BOTAO_VISUALIZAR_IMPRESSAO))).click()
 
 
     janela_impressao = driver.window_handles[1]

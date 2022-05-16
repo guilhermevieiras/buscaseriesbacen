@@ -1,4 +1,11 @@
+<!-- <h4 *ngIf="erroMostrarTabelaSeriesRecentes">Erro, não foi possível carregar/recarregar dados do servidor...</h4>
+<div class="card" *ngIf="mostraTabelaSeriesRecentes">
+  <app-tabela-series titulo="Series Recentes" [series]="seriesRecentes"></app-tabela-series>
+</div>
+<mat-spinner *ngIf="!mostraTabelaSeriesRecentes && !erroMostrarTabelaSeriesRecentes" style="margin:0 auto;" diameter="50"></mat-spinner> -->
 
+
+<h4 *ngIf="erroMostrarTabelaSeries">Erro, não foi possível carregar/recarregar dados do servidor...</h4>
 <div class="card" *ngIf="mostraTabelaSeries">
   <app-tabela-series titulo="Series Ativas" [series]="seriesAtivas"></app-tabela-series>
 </div>
@@ -6,6 +13,7 @@
 
 <br><br>
 
+<h4 *ngIf="erroMostrarTabelaSeriesDesativadas">Erro, não foi possível carregar/recarregar dados do servidor...</h4>
 <div class="card" *ngIf="mostraTabelaSeriesDesativadas">
   <app-tabela-series titulo="Series Desativadas" [series]="seriesDesativadas"></app-tabela-series>
 </div>

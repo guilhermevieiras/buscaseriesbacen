@@ -17,14 +17,17 @@ export class AppComponent implements OnInit {
     this.buscaSeriesDesativadas()
   }
 
-  seriesAtivas:Array<SerieEntity>
-  seriesDesativadas:Array<SerieEntity>
+  seriesAtivas!:Array<SerieEntity>
+  seriesDesativadas!:Array<SerieEntity>
 
   erroMostrarTabelaSeries = false
   mostraTabelaSeries = false
 
   erroMostrarTabelaSeriesDesativadas = false
   mostraTabelaSeriesDesativadas = false
+
+  erroMostrarTabelaSeriesRecentes = false
+  mostraTabelaSeriesRecentes = false
 
 
   buscaSeriesAtivas(){

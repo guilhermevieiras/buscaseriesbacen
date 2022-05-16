@@ -1,45 +1,55 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SerieEntity } from '../entity/serie-entity';
-import { RestService } from '../rest.service';
 
 @Component({
   selector: 'app-tabela-series',
   templateUrl: './tabela-series.component.html',
   styleUrls: ['./tabela-series.component.scss']
 })
-export class TabelaSeriesComponent implements OnInit {
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @Input('titulo') titulo: string;
-  @Input('series') series: Array<SerieEntity>;
+export class TabelaSeriesComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  @Input('titulo') titulo!: string;
+  @Input('series') series!: Array<SerieEntity>;
 
   //constructor(private restService: RestService) { }
   constructor(){ }
 
   ngOnInit(): void {
-    this.tabelaSeries.data = this.series;
-    setTimeout(() => this.tabelaSeries.paginator = this.paginator);
+    setTimeout(() => this.atualizaPaginacao());
     this.mostraTabelaSeries = true
   }
 
+  ngAfterViewInit() {
+    this.tabelaSeries.paginator = this.paginator;
+  }
+
+  totalRows = 0;
+  pageSize = 100;
+  currentPage = 0;
+
   tabelaSeries: MatTableDataSource<SerieEntity> = new MatTableDataSource()
-  colunas: string[] = ['codigo', 'nome', 'unidade', 'periodicidade', 'inicio', 'ultimovalor', 'fonte', 'especial',  'status']
-  erroMostrarTabelaSeries = false
+  colunas: string[] = ['codigo', 'nome', 'unidade', 'periodicidade', 'inicio', 'ultimovalor', 'fonte', 'especial']
   mostraTabelaSeries = false
 
-  // buscaSeries(){
-  //   this.restService.consultarSeries().subscribe((resposta:Array<SerieEntity>) => {
-  //     this.tabelaSeries.data = resposta;
-  //     setTimeout(() => this.tabelaSeries.paginator = this.paginator);
-  //     this.mostraTabelaSeries = true
-  //     this.erroMostrarTabelaSeries = false
-  //   }, (err) => {
-  //     console.log('Não conseguiu consultar séries')
-  //     console.log(err)
-  //     this.erroMostrarTabelaSeries = true
-  //   })
-  //}
+  atualizaPaginacao(){
+    this.mostraTabelaSeries = false
+    let base = this.currentPage * this.pageSize
+    this.tabelaSeries.data = this.series.slice(base, base + this.pageSize)
+    setTimeout(() => {
+      this.paginator.pageIndex = this.currentPage;
+      this.paginator.length = this.series.length;
+    });
+    this.mostraTabelaSeries = true
+  }
+
+  pageChanged(event: PageEvent) {
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.atualizaPaginacao();
+  }
   
 
 }

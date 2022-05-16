@@ -189,7 +189,10 @@ if __name__ == '__main__':
     # first_thread.start()
     # second_thread.start()
     start = time.time()
-    #coleta_dados()
+    try:
+        coleta_dados()
+    except Exception as e:
+        print('não foi possível executar a coleta de novos dados pelo erro:', str(e))
     end = time.time()
     print('tempo decorrido para atualização da base:', end - start)
     app.run(debug=True, use_reloader=False)
