@@ -7,26 +7,9 @@ Busca Series Ativas e Desativadas via web scraping e monta uma lista destas no A
 ## Instalar Python
 OBS: É recomendado o Python 3.10v ou superior
 
-### Web Scrapper para buscar dados no site do Bacen
+## Para instalar todas as dependências do Python basta executar o seguinte comando na pasta .\buscaseriesbacen
 ```python
-pip install beautifulsoup4
-```
-```python
-pip install selenium
-```
-```python
-pip install get-chrome-driver
-```
-### Servidor Rest feito com Flask
-```python
-pip install flask
-```
-```python
-pip install flask_restful
-```
-### ORM para gerenciar dados no banco
-```python
-pip install flask_sqlalchemy
+pip install requisitos.txt
 ```
 Então executar o comando para rodar os scripts de web scrapping e subir o servidor Flask na pasta .\buscaseriesbacen\python
 ```
@@ -53,7 +36,7 @@ Acessar o servidor via o endereço
 http://localhost:4200/
 ```
 
-# Alternativamente o projeto pode ser instalado via makefile (funciona em Linux e MacOS)
+# Alternativamente o projeto pode ser instalado via makefile (funciona em Linux e MacOS) executando o seguinte comando na pasta na pasta .\buscaseriesbacen
 ```
 make
 ```
