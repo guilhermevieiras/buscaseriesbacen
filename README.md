@@ -5,8 +5,9 @@ Busca Series Ativas e Desativadas via web scraping e monta uma lista destas no A
 
 
 ## Instalar Python
-### Web Scrapper para buscar dados no site do Bacen
+OBS: É recomendado o Python 3.10v ou superior
 
+### Web Scrapper para buscar dados no site do Bacen
 ```python
 pip install beautifulsoup4
 ```
