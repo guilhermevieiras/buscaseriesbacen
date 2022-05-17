@@ -9,11 +9,13 @@ import { AppSettings } from './appSettings';
 export class RestService {
   constructor(private http: HttpClient) { }
 
+  /* Consulta todas as series sem filtros */
   consultarSeries(){
     console.log('consultarSeries');
     return this.http.get<Array<any>>(AppSettings.API_ENDPOINT + 'series')
   }
 
+  /* Consulta as series filtrando por status */
   consultaSeriesPorStatus(status: string){
     console.log('consultarSeriesPorStatus');
     let parametros = new HttpParams();
