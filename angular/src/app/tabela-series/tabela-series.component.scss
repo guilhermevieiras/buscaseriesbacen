@@ -7,10 +7,7 @@ table{
 
 td, th {
     margin: 10px;
-    min-width: 20px;
-}
-
-
-::ng-deep .mat-expansion-panel-description {
-    text-align: center;
+    min-width:60px;
+    text-align: center !important;
+    justify-content: center;
 }

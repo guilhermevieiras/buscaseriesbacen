@@ -1,53 +1,30 @@
-import requests
-import os
-from datetime import date, datetime
-import threading
 import time
-
-# Executa operação ao fechar aplicação
-#import atexit
-
-
-#from apscheduler.schedulers.background import BackgroundScheduler
-
 
 # pip install flask
 from flask import Flask, request
 
 # pip install flask_restful
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api, Resource
 
-
+# pip install flask_sqlalchemy
 from sqlalchemy import orm, Table, Column, Integer, String, Date
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.sql.expression import Insert
-
-
-# pip install Flask-Script
-#from flask_script import Manager
 
 from models import SeriesModel, db
 from carregaDadosBacen import executaBuscaSeries
 
-
-app = Flask(__name__)
 BANCO_LOCAL_SQLALCHEMY = 'sqlite:///database.db'
 
-
+app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = BANCO_LOCAL_SQLALCHEMY
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 api = Api(app)
 db.init_app(app)
 
 
+# Criação do View que prove os serviços para salvar os dados no banco usando o ORM do SQLAlchemy
 class SeriesView(Resource):
-    # def get(self):
-    #     series = SeriesModel.query.all()
-    #     print(series)
-    #     return list(s.json() for s in series)
     def get(self):
         args = request.args
         status = args['status']
@@ -55,17 +32,13 @@ class SeriesView(Resource):
         series = db.session.query(SeriesModel).filter_by(status=status)
         print(series)
         return list(s.json() for s in series)
+    
     def salvaSeries(self, series):
         db.session.add_all(series)
         db.session.commit()
         db.session.flush()
-        
-        
-# def inicializa_banco(series):
-#     db.create_all()
-#     SeriesView().salvaSeries(series)
-
-
+     
+# Resolvendo problema de CORS de conflito na requisção entre o Flask e o Angular   
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -73,22 +46,13 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
-
-# @compiles(Insert)
-# def append_string(insert, compiler, **kw):
-#     s = compiler.visit_insert(insert, **kw)
-#     if 'append_string' in insert.kwargs:
-#         return s + " " + insert.kwargs['append_string']
-#     print(s)
-#     return s
-
-
+# Salva dados das séries encontradas antes que a instância de banco de dados gerenciada pelo Flask esteja disponível
 def inicializa_banco_antes_servidor(series):
     base = declarative_base()
     engine = create_engine(BANCO_LOCAL_SQLALCHEMY)
     base.metadata.bind = engine
     session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-    table = Table('series', base.metadata,
+    Table('series', base.metadata,
         Column('codigo', Integer, primary_key=True),
         Column('nome', String),
         Column('unidade', String),
@@ -101,26 +65,7 @@ def inicializa_banco_antes_servidor(series):
     base.metadata.create_all()
     for serie in series:
         session.merge(serie, load=True)
-    #session.add_all(series)
-    # query = ''' 
-    #     ON CONFLICT(codigo) DO UPDATE 
-    #         nome=VALUES(nome), 
-    #         unidade=VALUES(unidade), 
-    #         periodicidade=VALUES(periodicidade), 
-    #         inicio=VALUES(inicio), 
-    #         ultimovalor=VALUES(ultimovalor), 
-    #         fonte=VALUES(fonte), 
-    #         especial=VALUES(especial),
-    #         status=VALUES(status)'''
-    # codigos = []
-    # for serie in series:
-    #     if serie['codigo'] in codigos:
-    #         print('encontrado serie com codigo repetido', serie['codigo'])
-    #     else:
-    #         codigos.append(serie['codigo'])
-    #session.execute(table.insert(append_string = query), series)
     session.commit()
-    #session.merge()
     session.flush()
     session.close()
     
@@ -128,66 +73,15 @@ def inicializa_banco_antes_servidor(series):
 def coleta_dados():
     print('coleta_dados')
     series = executaBuscaSeries()
-    # serie1 = SeriesModel(1, 'teste3', '', '', date.today(), '', '', '', '')
-    # serie2 = SeriesModel(2, '', 'teste4', '', date.today(), '', '', '', '')
-    # serie1 = {
-    #         'codigo': 1,
-    #         'nome': 'teste',
-    #         'unidade': '',
-    #         'periodicidade': '',
-    #         'inicio': date.today(),
-    #         'ultimovalor': '',
-    #         'fonte': '',
-    #         'especial': '',
-    #         'status': ''
-    #     }
-    # serie2 = {
-    #         'codigo': 2,
-    #         'nome': 'teste2',
-    #         'unidade': '',
-    #         'periodicidade': '',
-    #         'inicio': date.today(),
-    #         'ultimovalor': '',
-    #         'fonte': '',
-    #         'especial': '',
-    #         'status': ''
-    #     }
-    # series = [serie1, serie2]
     inicializa_banco_antes_servidor(series)
     
         
         
 api.add_resource(SeriesView, '/series')
 
-
-# def do_something():
-#   print('MyFlaskApp is starting up!')
-
-# class MyFlaskApp(Flask):
-#   def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
-#     # if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
-#     #   with self.app_context():
-#     #     do_something()
-#     super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
-
-# app = MyFlaskApp(__name__)
-# app.run()
-
-
-# def teste():
-#     print('teste..........................................................')
-    
-
-# def inicializa_app():
-#     app.run(debug=True, use_reloader=False)
-    
-
-
 if __name__ == '__main__':
-    # first_thread = threading.Thread(target=inicializa_app)
-    # second_thread = threading.Thread(target=coleta_dados)
-    # first_thread.start()
-    # second_thread.start()
+    
+    # Inicializa coleta de dados de séries via web scrapping
     start = time.time()
     try:
         coleta_dados()
@@ -195,6 +89,8 @@ if __name__ == '__main__':
         print('não foi possível executar a coleta de novos dados pelo erro:', str(e))
     end = time.time()
     print('tempo decorrido para atualização da base:', end - start)
+    
+    # Inicializa servidor Flask rest 
     app.run(debug=True, use_reloader=False)
 
         
