@@ -52,3 +52,8 @@ Acessar o servidor via o endereço
 ```
 http://localhost:4200/
 ```
+
+# Alternativamente o projeto pode ser instalado via makefile (funciona em Linux e MacOS)
+```
+make
+```
